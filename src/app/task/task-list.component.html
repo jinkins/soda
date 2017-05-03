@@ -1,0 +1,68 @@
+<div class="col-md-6">
+    <div class="row">
+      <div class="panel panel-primary">
+        <div class="panel-heading">Taches en cours <a [routerLink]="['new']"><i class="fa fa-plus-circle pull-right white"></i></a> </div>
+        <div class="panel-body">
+          <!-- Table -->
+          <table class="table">
+            <tr>
+              <th>Titre</th>
+              <th><a (click)="sortBy('priority')">Priority</a></th>
+              <th><a (click)="sortBy('deadline')">Deadline</a></th>
+            </tr>
+            <tr *ngFor="let task of tasks">
+              <td><a [routerLink]="[task.id]">{{ task.title }}</a></td>
+              <td>{{ task.priority }}</td>
+              <td>{{ task.deadline | date:'dd/MM/yyyy' }} &nbsp;&nbsp;<span [class]="task.deadlineStatusStyle()">{{task.deadlineDaysLeftText()}}</span> </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fin des running -->
+    
+    <hr/>
+
+    <!-- Debut des en attente -->
+
+    <div class="row">
+      <div class="panel panel-default">
+        <div class="panel-heading">Taches en attente</div>
+        <div class="panel-body">
+          <!-- Table -->
+          <table class="table">
+            <tr>
+              <th>Titre</th>
+              <th>Priority</th>
+              <th>Deadline</th>
+            </tr>
+            <tr>
+              <td>Task 0</td>
+              <td>P1</td>
+              <td> 04/04/2017 &nbsp;&nbsp;<span class="label label-danger">due yesterday</span> </td>
+            </tr>
+            <tr>
+              <td>Task 1</td>
+              <td>P1</td>
+              <td> 05/04/2017 &nbsp;&nbsp;<span class="label label-warning">due today</span> </td>
+            </tr>
+            <tr>
+              <td>Task 2</td>
+              <td>P3</td>
+              <td>08/04/2017 &nbsp;&nbsp;<span class="label label-success">3 days left</span> </td>
+            </tr>
+            <tr>
+              <td>Task 3</td>
+              <td>P5</td>
+              <td>08/04/2017 &nbsp;&nbsp;<span class="label label-success">3 days left</span> </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-1"></div>
+  <div class="col-md-5">
+      <router-outlet></router-outlet>
+  </div>

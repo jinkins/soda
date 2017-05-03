@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="panel panel-primary">
+        <div class="panel-heading" *ngIf="modeEdit">Modifier</div>
+        <div class="panel-heading" *ngIf="!modeEdit">Ajouter une tache</div>
+        <div class="panel-body">
+            <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label class="sr-only" for="title">Title</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-font" aria-hidden="true"></i></div>
+                        <input type="text" class="form-control" id="title" placeholder="Title" formControlName="title" name="title" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="description">Description</label>
+                    <div class="input-group">
+                        <textarea name="description" id="description" rows="5" placeholder="Description" class="form-control" formControlName="description"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="priority">Priority</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-exclamation" aria-hidden="true"></i></div>
+                        <input type="number" class="form-control" id="priority" placeholder="Priority" formControlName="priority" name="priority"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="sr-only" for="deadline">Deadline</label>
+                    <div class="input-group">
+                        <div class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></div>
+                        <span class="input-group-addon">
+                            <input type="checkbox" formControlName="withDl" name="withDl" id="withDl"/>
+                        </span>
+                        <input type="date" class="form-control" id="deadline" placeholder="Deadline" formControlName="deadline" name="deadline" />
+                    </div>
+                </div>
+                <div class="form-group">
+                        <button [class]="statusButton()" [disabled]="!taskForm.valid" type="button" (click)="onSubmit()">Save <i [class]="loading()"></i></button>
+                    </div>
+            </form>
+        </div>
+    </div>
+</div>
