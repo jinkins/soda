@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from "./app.component";
@@ -33,7 +34,7 @@ export const config = {
         BrowserModule, routing, ReactiveFormsModule, FormsModule, HttpModule,
         AngularFireModule.initializeApp(config)
     ],
-    providers: [TaskService],
+    providers: [TaskService, AngularFireDatabase],
     bootstrap: [AppComponent]
 })
 export class AppModule {

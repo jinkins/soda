@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 
 import { Task } from "./task";
 import { TaskService } from './task.service';
-import * as io from 'socket.io-client';
 
 @Component({
   selector: 'app-task-list',
@@ -14,13 +13,13 @@ export class TaskListComponent implements OnInit {
 
   private tasks: Task[];
   private sortedBy: string = "deadline";
-  private socket: io; 
 
   constructor(private ts: TaskService, private router: Router) { }
 
   ngOnInit() {
     this.ts.getTasks().subscribe(
-      (tasks: Task[]) => {
+      (tasks) => {
+        console.log(tasks);
         this.tasks = tasks;
         this.sort();
       }

@@ -12,7 +12,9 @@ export class TaskService {
   constructor(private db: AngularFireDatabase) { }
 
   getTasks() {
-   return this.db.list('/tasks');
+   
+   let tasks =  this.db.list('/tasks');
+   return tasks; 
   }
 
   getTask(id: string) {
@@ -24,7 +26,7 @@ export class TaskService {
       title: task.getTitle(),
       description: task.getDescription(), 
       priority: task.getPriority().toString(),
-      deadline: task.getDeadline()
+      deadline: task.getDeadline().toJSON()
     })
 
   }
