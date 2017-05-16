@@ -21,7 +21,8 @@
                     <label class="sr-only" for="priority">Priority</label>
                     <div class="input-group">
                         <div class="input-group-addon"><i class="fa fa-exclamation" aria-hidden="true"></i></div>
-                        <input type="number" class="form-control" id="priority" placeholder="Priority" formControlName="priority" name="priority"/>
+                        <input type="number" class="form-control" id="priority" placeholder="Priority" formControlName="priority" name="priority"
+                        />
                     </div>
                 </div>
                 <div class="form-group">
@@ -35,8 +36,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                        <button [class]="statusButton()" [disabled]="!taskForm.valid" type="button" (click)="onSubmit()">Save <i [class]="loading()"></i></button>
-                    </div>
+                    <button [class]="statusButton()" [disabled]="!taskForm.valid" type="button" (click)="onSubmit()"><i class="fa fa-floppy-o" aria-hidden="true"></i> <i [class]="loading()"></i></button>
+                    <button class="btn btn-danger" type="button" (click)="onDelete(task.id)"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                </div>
             </form>
         </div>
     </div>

@@ -29,7 +29,8 @@ export class TaskDetailComponent implements OnInit {
   taskForm: FormGroup;
   task: Task;
   withDeadline: boolean = true;
-  results: any; 
+  requestStatus: string = null;  
+  requestText: string; 
 
 
   constructor(private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private ts: TaskService) { }
@@ -47,8 +48,9 @@ export class TaskDetailComponent implements OnInit {
             this.modeEdit = true;
             // DUMMY
             this.ts.getTask(this.id).subscribe(
-              (task: Task) => {
-                this.task = task;
+              (task) => {
+                this.task = new Task(task.$key, task.title, task.description, task.priority, task.deadline);
+                this.task.setDeadlineFromISO(task.deadline);
                 if (this.task.getDeadline()) {
                   this.withDeadline = true;
                 }
@@ -115,7 +117,7 @@ export class TaskDetailComponent implements OnInit {
   }
 
   onSubmit() {
-
+    this.requestStatus = "running"
     this.task = new Task(
       null,
       this.taskForm.value['title'],
@@ -126,25 +128,32 @@ export class TaskDetailComponent implements OnInit {
 
     if (this.id != "new") {
       this.task.setId(this.id);
-
+      this.ts.editTask(this.task)
+      .then(
+        () => this.requestStatus = "ok")
+      .catch((err) => {
+        this.requestText = err.message; 
+        this.requestStatus = "ko";
+      })
     }
 
     else {
       this.ts.addTask(this.task); 
     }
+  }
 
-
-    console.log(this.task);
+  onDelete(id:string){
+    this.ts.deleteTask(id);
   }
 
   statusButton(){
-    if(!this.results){
+    if(this.requestStatus == null){
       return "btn btn-primary";
     }
-    if(this.results.status == 500){
+    if(this.requestStatus == "ko"){
       return "btn btn-error";
     }
-    else if (this.results.status == 201) {
+    else if (this.requestStatus == "ok") {
       return "btn btn-success";
     }
     else{
@@ -153,29 +162,20 @@ export class TaskDetailComponent implements OnInit {
   }
 
   loading(){
-    if(!this.results){
+    if(this.requestStatus == null){
       return "";
     }
 
-    else if(this.results.status == 201){
+    else if(this.requestStatus == "ok"){
       return "fa fa-check-circle";
     }
     
-    else if(this.results.status == 500){
+    else if(this.requestStatus == "ko"){
       return "fa fa-exclamation";
     }
 
-    else{
-      return "fa fa-cog fa-spin fa-3x fa-fw";
-    }
-  }
-
-  response(){
-    if(!this.results){
-      return ""
-    }
-    else{
-      return this.results.title
+    else if(this.requestStatus == "running") {
+      return "fa fa-cog fa-spin fa-fw";
     }
   }
 

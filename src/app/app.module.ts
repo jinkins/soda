@@ -1,17 +1,21 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from "./app.component";
 import { TaskListComponent } from './task/task-list.component';
 import { TaskDetailComponent } from './task/task-detail.component';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+
 import { routing } from './app.routing';
 
 import { TaskService } from './task/task.service';
+import { AuthService } from './shared/auth.service';
 
 export const config = {
     apiKey: "AIzaSyCTwOUBh2fUqdsInWVT3ErgtJYKpqEbopk",
@@ -27,14 +31,12 @@ export const config = {
         AppComponent,
         TaskListComponent,
         TaskDetailComponent,
-        
-
     ],
     imports: [
         BrowserModule, routing, ReactiveFormsModule, FormsModule, HttpModule,
         AngularFireModule.initializeApp(config)
     ],
-    providers: [TaskService, AngularFireDatabase],
+    providers: [TaskService, AngularFireDatabase, AuthService, AngularFireAuth],
     bootstrap: [AppComponent]
 })
 export class AppModule {

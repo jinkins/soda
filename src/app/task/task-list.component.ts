@@ -13,18 +13,35 @@ export class TaskListComponent implements OnInit {
 
   private tasks: Task[];
   private sortedBy: string = "deadline";
+  private requestStatus: string = null;
+  private requestText: string;
 
   constructor(private ts: TaskService, private router: Router) { }
 
   ngOnInit() {
+    this.requestStatus = "running";
     this.ts.getTasks().subscribe(
       (tasks) => {
-        console.log(tasks);
-        this.tasks = tasks;
+        this.tasks = [];
+        for (let task of tasks) {
+          let t = new Task(
+            task.$key,
+            task.title,
+            task.description,
+            task.priority,
+            null
+          );
+          t.setDeadlineFromISO(task.deadline)
+          this.tasks.push(t);
+        }
         this.sort();
+        this.requestStatus = "ok";
       }
-    ); 
-
+      , ((err) => {
+        this.requestStatus = "ko";
+        this.requestText = err;
+      }
+      ));
 
   }
 
@@ -41,11 +58,11 @@ export class TaskListComponent implements OnInit {
   sort() { // Sort the tasklist according to the sortedBy criteria. 
     if (this.sortedBy === "deadline")
       this.tasks.sort((a, b) => {
-        if(b.getDeadline() == null) { // Put the no deadline at the end. 
-          return -1; 
+        if (b.getDeadline() == null) { // Put the no deadline at the end. 
+          return -1;
         }
-        if(a.getDeadline() == null){
-          return 1; 
+        if (a.getDeadline() == null) {
+          return 1;
         }
         let diff = a.diffDays(b.getDeadline());
         if (diff > 0) {
@@ -78,11 +95,11 @@ export class TaskListComponent implements OnInit {
           return -1;
         }
 
-        if(b.getDeadline() == null) { // Put the no deadline at the end. 
-          return -1; 
+        if (b.getDeadline() == null) { // Put the no deadline at the end. 
+          return -1;
         }
-        if(a.getDeadline() == null){
-          return 1; 
+        if (a.getDeadline() == null) {
+          return 1;
         }
 
         let diff = a.diffDays(b.getDeadline());
@@ -93,5 +110,23 @@ export class TaskListComponent implements OnInit {
           return -1;
         }
       })
+  }
+
+  isLoading(){
+    if(this.requestStatus === "running"){
+      return true;
+    }
+    else{
+      return false; 
+    }
+  }
+
+  errorOccurs(){
+    if(this.requestStatus === "ko"){
+      return true; 
+    }
+    else{
+      return false; 
+    }
   }
 }
