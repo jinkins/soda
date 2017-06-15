@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
         });
 
         this.as.connectionState().subscribe(
-            (state) => console.log(this.state = state)
+            (state) => this.state = state
         )
     }
 

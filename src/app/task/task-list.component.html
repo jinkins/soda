@@ -1,8 +1,29 @@
-<div class="col-md-6">
   <div class="row">
+    <div class="col-md-6">
     <div class="panel panel-primary">
       <div class="panel-heading">Taches en cours <a [routerLink]="['new']"><i class="fa fa-plus-circle pull-right white"></i></a> </div>
       <div class="panel-body">
+        <br/>
+        <div class="btn-group" role="group" aria-label="Filter Group">
+          <button type="button" id="filter-me" (click)="filter('assignee=me')" class="btn btn-default">My Tasks</button>
+          <button type="button" id="filter-due-today" (click)="filter('due<=today')" class="btn btn-default">Due</button>
+          <button type="button" id="filter-due-7d" (click)="filter('due<=7d')" class="btn btn-default">7 jours</button>
+        </div>
+        <br/><br/>
+        <div class="input-group">
+          <span class="input-group-addon" id="filterQuery-add"><i class="fa fa-filter" aria-hidden="true"></i></span>
+          <input type="text" class="form-control" placeholder="Query" aria-describedby="filterQuery-add" [(ngModel)]="filterQuery">
+        </div>
+        
+
+        <!-- Generated markup by the plugin -->
+        <div class="tooltip top" role="tooltip">
+          <div class="tooltip-arrow"></div>
+          <div class="tooltip-inner">
+            Some tooltip text!
+          </div>
+        </div>
+        <hr/>
         <!-- Table -->
         <table class="table">
           <tr>
@@ -14,8 +35,8 @@
             <td>
               <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
             </td>
-              <td>Data cannot be loaded...</td>
-              <td>Something bad happens when retrieving the data. Please contact god and pray.</td>
+            <td>Data cannot be loaded...</td>
+            <td>Something bad happens when retrieving the data. Please contact god and pray.</td>
           </tr>
           <tr *ngIf="isLoading()">
             <td>
@@ -24,7 +45,7 @@
             <td>Loading in progress</td>
             <td>Really, if you can read this, this means that the server is quite slow today</td>
           </tr>
-          <tr *ngFor="let task of tasks">
+          <tr *ngFor="let task of tasks | filter:filterQuery">
             <td><a [routerLink]="[task.id]">{{ task.title }}</a></td>
             <td>{{ task.priority }}</td>
             <td>{{ task.deadline | date:'dd/MM/yyyy' }} &nbsp;&nbsp;<span [class]="task.deadlineStatusStyle()">{{task.deadlineDaysLeftText()}}</span>              </td>
@@ -33,50 +54,7 @@
       </div>
     </div>
   </div>
-
   <!-- Fin des running -->
-
-  <hr/>
-
-  <!-- Debut des en attente -->
-
-  <div class="row">
-    <div class="panel panel-default">
-      <div class="panel-heading">Taches en attente</div>
-      <div class="panel-body">
-        <!-- Table -->
-        <table class="table">
-          <tr>
-            <th>Titre</th>
-            <th>Priority</th>
-            <th>Deadline</th>
-          </tr>
-          <tr>
-            <td>Task 0</td>
-            <td>P1</td>
-            <td> 04/04/2017 &nbsp;&nbsp;<span class="label label-danger">due yesterday</span> </td>
-          </tr>
-          <tr>
-            <td>Task 1</td>
-            <td>P1</td>
-            <td> 05/04/2017 &nbsp;&nbsp;<span class="label label-warning">due today</span> </td>
-          </tr>
-          <tr>
-            <td>Task 2</td>
-            <td>P3</td>
-            <td>08/04/2017 &nbsp;&nbsp;<span class="label label-success">3 days left</span> </td>
-          </tr>
-          <tr>
-            <td>Task 3</td>
-            <td>P5</td>
-            <td>08/04/2017 &nbsp;&nbsp;<span class="label label-success">3 days left</span> </td>
-          </tr>
-        </table>
-      </div>
-    </div>
+  <div class="col-md-6">
+    <router-outlet></router-outlet>
   </div>
-</div>
-<div class="col-md-1"></div>
-<div class="col-md-5">
-  <router-outlet></router-outlet>
-</div>

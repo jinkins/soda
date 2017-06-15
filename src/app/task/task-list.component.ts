@@ -15,6 +15,7 @@ export class TaskListComponent implements OnInit {
   private sortedBy: string = "deadline";
   private requestStatus: string = null;
   private requestText: string;
+  private filterQuery: string = 'assignee=me';
 
   constructor(private ts: TaskService, private router: Router) { }
 
@@ -29,9 +30,12 @@ export class TaskListComponent implements OnInit {
             task.title,
             task.description,
             task.priority,
-            null
+            null,
+            task.createdBy, 
+            task.assignee,
+            task.status
           );
-          t.setDeadlineFromISO(task.deadline)
+          t.setDeadlineFromISO(task.deadline);
           this.tasks.push(t);
         }
         this.sort();
@@ -128,5 +132,33 @@ export class TaskListComponent implements OnInit {
     else{
       return false; 
     }
+  }
+
+  filter(q:string):void {
+    
+    let c = RegExp(q);
+
+    if(this.filterQuery === ''){ // si le query est vide, j'y mets l'élément. 
+      this.filterQuery = q;
+    }
+
+    else if(c.test(this.filterQuery)) { // si le query contient l'élément, je l'enlève' 
+      let p:number = this.filterQuery.search(c);
+      
+      if(p>0){ // ce n'est pas le premier élément de la liste, on supprime donc le caractère avant qui est & ou |
+        this.filterQuery = this.filterQuery.slice(0,p-1) + this.filterQuery.slice(p);
+      }
+      this.filterQuery = this.filterQuery.replace(c,'');
+    }
+
+    else{ // si le query ne le contient pas, je l'y ajoute. 
+      this.filterQuery = this.filterQuery + '&' + q;
+    }
+
+    let notFirst = new RegExp(/^\||^&/)
+
+    if(notFirst.test(this.filterQuery)){ // Remove & ou | si présent en début de chaine. 
+      this.filterQuery = this.filterQuery.slice(1);
+    } 
   }
 }

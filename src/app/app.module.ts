@@ -16,6 +16,9 @@ import { routing } from './app.routing';
 
 import { TaskService } from './task/task.service';
 import { AuthService } from './shared/auth.service';
+import { LogComponent } from './log/log.component';
+import { HomeComponent } from './home/home.component';
+import { FilterPipe } from './task/filter.pipe';
 
 export const config = {
     apiKey: "AIzaSyCTwOUBh2fUqdsInWVT3ErgtJYKpqEbopk",
@@ -31,6 +34,9 @@ export const config = {
         AppComponent,
         TaskListComponent,
         TaskDetailComponent,
+        LogComponent,
+        HomeComponent,
+        FilterPipe,
     ],
     imports: [
         BrowserModule, routing, ReactiveFormsModule, FormsModule, HttpModule,

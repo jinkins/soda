@@ -18,4 +18,8 @@ export class AuthService {
   connectionState() {
     return this.as.authState;
   }
+
+  getUid():string {
+    return this.as.auth.currentUser.uid
+  }
 }

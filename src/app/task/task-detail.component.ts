@@ -31,6 +31,7 @@ export class TaskDetailComponent implements OnInit {
   withDeadline: boolean = true;
   requestStatus: string = null;  
   requestText: string; 
+  statusOptions:string[] = ["New", "Active", "Waiting", "Done"]; // Options for the status. 
 
 
   constructor(private route: ActivatedRoute, private router: Router, private formBuilder: FormBuilder, private ts: TaskService) { }
@@ -49,7 +50,7 @@ export class TaskDetailComponent implements OnInit {
             // DUMMY
             this.ts.getTask(this.id).subscribe(
               (task) => {
-                this.task = new Task(task.$key, task.title, task.description, task.priority, task.deadline);
+                this.task = new Task(task.$key, task.title, task.description, task.priority, task.deadline, task.createdBy, task.assignee, task.status);
                 this.task.setDeadlineFromISO(task.deadline);
                 if (this.task.getDeadline()) {
                   this.withDeadline = true;
@@ -73,6 +74,7 @@ export class TaskDetailComponent implements OnInit {
     let dl: Date = new Date();
     let p: number = 3;
     let withDl = this.withDeadline;
+    let s: string; 
 
     if (this.modeEdit && this.task) {
       t = this.task.getTitle();
@@ -90,7 +92,8 @@ export class TaskDetailComponent implements OnInit {
       description: [d],
       deadline: [{ value: dl.toISOString().substring(0, 10), disabled: !(this.withDeadline) }],
       withDl: [withDl],
-      priority: [p, Validators.required]
+      priority: [p, Validators.required],
+      status: [s, Validators.required]
     })
 
 
@@ -123,7 +126,10 @@ export class TaskDetailComponent implements OnInit {
       this.taskForm.value['title'],
       this.taskForm.value['description'],
       Number(this.taskForm.value['priority']),
-      new Date(this.taskForm.value['deadline'])
+      new Date(this.taskForm.value['deadline']), 
+      null,  // will be fixed later
+      null, // will be fixed later
+      this.taskForm.value["status"]
     );
 
     if (this.id != "new") {

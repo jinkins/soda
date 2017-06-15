@@ -1,3 +1,5 @@
+import { Log } from '../Log/Log'
+
 export class Task {
 
     private id: string;
@@ -5,13 +7,24 @@ export class Task {
     private description?: string;
     private priority: number;
     private deadline?: Date;
+    // V0.2
+    private createdBy: string; // creator's uid
+    private assignee: string; // assignee's uid
+    // V0.3
+    private status: string;
 
-    constructor(i: string, t: string, d: string, p: number, dl: Date) {
+    private logs: Log[];
+
+
+    constructor(i: string, t: string, d: string, p: number, dl: Date, c:string, a:string, s:string) {
         this.id = i;
         this.title = t;
         this.description = d;
         this.priority = p;
-        this.deadline = dl;
+        this.deadline = dl; 
+        this.createdBy = c;
+        this.assignee = a;
+        this.status = s;
     }
 
     getId() {
@@ -32,6 +45,10 @@ export class Task {
 
     getPriority(): number {
         return this.priority;
+    }
+
+    getAssignee():string {
+        return this.assignee; 
     }
 
     setDeadlineFromISO(t) {
